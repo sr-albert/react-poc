@@ -1,20 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import "./toggle-button.style.css"; // Import your custom CSS file
 
-function ToggleButton() {
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = () => {
-    setChecked(!checked);
-  };
-
+function ToggleButton({ checked, onChange }) {
   return (
     <div className="switch">
       <input
         type="checkbox"
         id="toggle"
         checked={checked}
-        onChange={handleChange}
+        onChange={onChange}
       />
       <label
         htmlFor="toggle"
