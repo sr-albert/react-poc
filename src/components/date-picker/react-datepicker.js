@@ -1,194 +1,115 @@
-// import React, { useState } from "react";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-
 import React, { useState } from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
-import enGB from "date-fns/locale/en-GB";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const CustomInput = ({ value, onClick }) => {
+
+import "./style.css"; // Import your custom CSS file
+import ToggleButton from "../button";
+import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
+
+const CustomDatePicker = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const clearDate = () => {
+    // Clear all data like: end date, start date, remind date, etc.
+  };
+
+  const RenderCalendarContainer = ({ children }) => {
+    return (
+      <div
+        className="custom-calendar-container"
+        style={{
+          backgroundColor: "white",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div className="calendar-wrapper">{children}</div>
+        <div
+          className="remind-wrapper"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <AccessAlarmIcon />
+            <p>Remind</p>
+          </div>
+          <select>
+            <option value="none">None</option>
+            <option value="1-day-before">1 day before</option>
+            <option value="2-days-before">2 days before</option>
+            <option value="1-week-before">1 week before</option>
+          </select>
+        </div>
+        <div
+          className="end-date-and-time-wrapper"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div className="">
+            <div className="end-date-wrapper">
+              <p>End date</p>
+            </div>
+            <ToggleButton />
+          </div>
+        </div>
+        <div className="date-format-wrapper"></div>
+        <div className="clear-wrapper">
+          <button onClick={clearDate}>Clear</button>
+        </div>
+        <div className="learn-about-wrapper"></div>
+      </div>
+    );
+  };
+
+  const RenderCustomHeader = ({ date, decreaseMonth, increaseMonth }) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <p>
+          {date.toLocaleString("en-GB", { month: "long", year: "numeric" })}
+        </p>
+        <div>
+          <button onClick={decreaseMonth}>Prev</button>
+          <button onClick={increaseMonth}>Next</button>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <button className="custom-input" onClick={onClick}>
-      {value}
-    </button>
+    <div className="date-picker-container">
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleDateChange}
+        dateFormat="dd/MM/yyyy"
+        withPortal
+        className="custom-datepicker"
+        renderCustomHeader={RenderCustomHeader}
+        calendarContainer={RenderCalendarContainer}
+      />
+    </div>
   );
 };
-// const CustomHeader = ({
-//   date,
-//   decreaseMonth,
-//   increaseMonth,
-//   prevMonthButtonDisabled,
-//   nextMonthButtonDisabled,
-//   showMonthYearDropdown,
-//   toggleMonthYearDropdown,
-// }) => (
-//   <div
-//     className="custom-header"
-//     style={{
-//       display: "flex",
-//       justifyContent: "space-between",
-//       alignItems: "center",
-//       margin: "0 0 10px 0",
-//     }}
-//   >
-//     <span
-//       className="custom-header-date"
-//       onClick={toggleMonthYearDropdown}
-//       style={{ cursor: "pointer" }}
-//     >
-//       {date.toLocaleString("en-US", {
-//         month: "long",
-//         year: "numeric",
-//       })}
-//     </span>
-
-//     <div id="action-buttons">
-//       <button
-//         className="custom-header-button"
-//         onClick={decreaseMonth}
-//         disabled={prevMonthButtonDisabled}
-//       >
-//         {"<"}
-//       </button>
-//       <button
-//         className="custom-header-button"
-//         onClick={increaseMonth}
-//         disabled={nextMonthButtonDisabled}
-//       >
-//         {">"}
-//       </button>
-//     </div>
-//   </div>
-// );
-
-// export default function POCReactDatePicker() {
-//   const [config, setConfig] = useState({
-//     startDate: new Date(),
-//   });
-
-//   const onChange = (date) => {
-//     setConfig({
-//       ...config,
-//       startDate: date,
-//     });
-//   };
-
-//   return (
-//     <div className="react-datepicker-wrapper">
-//       <h1
-//         style={{
-//           fontFamily: "Arial, sans-serif",
-//           fontSize: "24px",
-//           fontWeight: "bold",
-//           color: "#4285F4",
-//         }}
-//       >
-//         React Datepicker
-//       </h1>
-
-//       <DatePicker
-//         selected={config.startDate}
-//         onChange={onChange}
-//         className="google-datepicker"
-//         calendarClassName="google-datepicker-calendar"
-//         dateFormat="dd/MM/yyyy"
-//         placeholderText="Select a date"
-//         dropdownMode="select"
-//         popperPlacement="bottom-start"
-//         customInput={<CustomInput />}
-//         showTwoColumnMonthYearPicker
-//         // add the time picker below
-//         showTimeSelect
-//       />
-//     </div>
-//   );
-// }
-
-registerLocale("en-GB", enGB);
-
-function CustomDatePicker() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
-  const [showTime, setShowTime] = useState(false);
-  const [showEndDate, setShowEndDate] = useState(false);
-  const [showStartDate, setShowStartDate] = useState(true);
-
-  const CustomHeader = ({
-    date,
-    changeYear,
-    changeMonth,
-    decreaseMonth,
-    increaseMonth,
-  }) => (
-    <div className="header">
-      <div>{`${date.toLocaleString("en-GB", {
-        month: "long",
-      })} ${date.getFullYear()}`}</div>
-      <button onClick={decreaseMonth}>Prev</button>
-      <button onClick={increaseMonth}>Next</button>
-    </div>
-  );
-
-  const toggleEndDate = () => {
-    setShowEndDate(!showEndDate);
-  };
-
-  const toggleStartDate = () => {
-    setShowStartDate(!showStartDate);
-  };
-
-  const clearAll = () => {
-    setStartDate(new Date());
-    setEndDate(null);
-    setShowTime(false);
-    setShowEndDate(false);
-    setShowStartDate(true);
-  };
-
-  const onChange = (date) => {
-    setStartDate(date);
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "center",
-      }}
-    >
-      {showStartDate && (
-        <DatePicker
-          selected={startDate}
-          onChange={onChange}
-          className="google-datepicker"
-          calendarClassName="google-datepicker-calendar"
-          dateFormat="dd/MM/yyyy"
-          placeholderText="Select a date"
-          dropdownMode="select"
-          popperPlacement="bottom-start"
-          customInput={<CustomInput />}
-          showTwoColumnMonthYearPicker
-        />
-      )}
-      {showEndDate && (
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          dateFormat="dd/MM/yyyy"
-          placeholderText="Select an end date"
-          renderCustomHeader={CustomHeader}
-          showTimeSelect={showTime}
-          locale="en-GB"
-        />
-      )}
-      <button onClick={toggleEndDate}>Toggle End Date</button>
-      <button onClick={toggleStartDate}>Toggle Start Date</button>
-      <button onClick={() => setShowTime(!showTime)}>Toggle Time Select</button>
-      <button onClick={clearAll}>Clear All</button>
-    </div>
-  );
-}
 
 export default CustomDatePicker;

@@ -10,6 +10,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "autoprefixer": "latest",
+    "postcss": "latest",
     "react": "^18.2.0",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
@@ -57,7 +59,7 @@
     "eslint-plugin-storybook": "^0.8.0",
     "prop-types": "^15.8.1",
     "storybook": "^8.0.8",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "latest",
     "webpack": "^5.91.0"
   }
 }
